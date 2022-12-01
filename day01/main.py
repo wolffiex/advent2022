@@ -7,11 +7,6 @@ with open("input.txt") as f:
         else:
             elves.append(0)
 
-max_elf = 0
-for cal in elves:
-    if cal > max_elf:
-        max_elf = cal
-
 elves.sort()
 elves.reverse()
 print(f"Max calories: {elves[0]}")
