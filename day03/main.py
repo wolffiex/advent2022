@@ -8,7 +8,7 @@ def get_value(c):
         return ord(c) - ord('a') + 1
 
 
-def part1_line(line):
+def part1(line):
     half = len(line)//2
     first, second = line[:half], line[half:]
     joined = ":".join([first, second])
@@ -24,41 +24,29 @@ ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw
 """
 
-# sum = 0
-# for line in sample_input.splitlines():
-#     sum += part1_line(line)
+sample_result = sum(map(part1, sample_input.splitlines()))
+print(f"Sample input part 1: {sample_result}")
 
-# print(f"Sample input part 1sum: {sum}")
+part1_result = sum(map(part1, open("input.txt")))
+print(f"Full input part 1: {part1_result}")
 
-# sum = 0
-# for line in open("input.txt"):
-#     sum += part1_line(line)
-# print(f"Part 1 sum: {sum}")
-
+### Part The Second
 part2_re = re.compile(r"(.).*:.*\1.*:.*\1")
-def part2_line(line_iter):
-    try:
-        elf_group = ":".join(map(lambda _: next(line_iter), range(3)))
-    except:
-        return None
-    if len(elf_group) == 0:
-        return None
-    print(len(elf_group))
+def part2(elf_it):
+    elf_group = ":".join([next(elf_it), next(elf_it), next(elf_it)])
     result = part2_re.search(elf_group)
     assert result
     return get_value(result.group(1))
 
+def process(f, it):
+    while True:
+        try:
+            yield f(it)
+        except StopIteration:
+            return 
 
-it = iter(sample_input.splitlines())
-print(part2_line(it))
-print(part2_line(it))
+sample_result2 = sum(process(part2, iter(sample_input.splitlines())))
+print(f"Sample input part 2: {sample_result2}")
 
-input_it = iter(open("input.txt").read().splitlines())
-part2_sum = 0
-while True:
-    v = part2_line(input_it)
-    if v is None:
-        print(f"Sum of part2 is {part2_sum}")
-        break
-    else:
-        part2_sum += v
+part2_result = sum(process(part2, map(lambda l:l.rstrip(), open("input.txt"))))
+print(f"Result for part 2: {part2_result}")
