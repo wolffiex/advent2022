@@ -45,7 +45,6 @@ class Result(str, Enum):
     DRAW='Y'
     WIN='Z'
 
-sum2 = 0
 def choose(oppo, result):
     match result:
         case Result.DRAW:
@@ -57,6 +56,7 @@ def choose(oppo, result):
                 if b == oppo:
                     return a
 
+sum2 = 0
 for line in open('input.txt'):
     [opp, res] = line.rstrip().split(' ')
     oppo, result = Choice(opp), Result(res)
