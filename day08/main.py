@@ -17,11 +17,7 @@ def process_grid(inp, f):
             l, r = [*reversed(row[:x])], row[x+1:]
             t, b = [*reversed(col[:y])], col[y+1:]
             height = grid[y][x]
-            result = f(height, [l, r, t, b])
-            # if result > 10000:
-            # if result:
-            #     print(f"**{x},{y} [{height}] {result}**")
-            yield result
+            yield f(height, [l, r, t, b])
 
 def count_visible(height, vecs):
     for vec in vecs:
