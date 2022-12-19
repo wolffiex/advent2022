@@ -19,7 +19,7 @@ def move_point(p, t):
 
 def can_escape(from_point, points):
     for t in translations:
-        p = move_point(from_point, t)
+        p = from_point
         while p not in points:
             p = move_point(p, t)
             for i in range(3):
@@ -32,8 +32,7 @@ def count_exterior(translations, points):
         for t in translations:
             adjacent = move_point(p, t)
             if adjacent not in points:
-                if can_escape(adjacent, points):
-                    yield 1
+                yield 1 if can_escape(adjacent, points) else 0
 
 def count_unoccupied(translations, points):
     for p in points:
