@@ -8,33 +8,38 @@ for pos in range(3):
 
 def part2(input_):
     points = set(map(lambda line: tuple(map(int, line.split(","))), input_.rstrip().split("\n")))
-    return sum(count_exterior(translations, points))
+    exterior = find_exterior(points)
+    return sum(count_exterior(points, exterior))
 
 def part1(input_):
     points = set(map(lambda line: tuple(map(int, line.split(","))), input_.rstrip().split("\n")))
-    return sum(count_unoccupied(translations, points))
+    return sum(count_unoccupied(points))
 
 def move_point(p, t):
     return (t[0] + p[0], t[1] + p[1], t[2] + p[2])
 
-def can_escape(from_point, points):
-    for t in translations:
-        p = from_point
-        while p not in points:
-            p = move_point(p, t)
-            for i in range(3):
-                if p[i] < 0 or p[i] > 30:
-                    return True
-    return False
+def in_bounds(p):
+    for i in range(3):
+        if p[i] < 0 or p[i] > 30:
+            return False
+    return True
 
-def count_exterior(translations, points):
+def find_exterior(points):
+    exterior = {(0,0,0)}
+    last_size = 0
+    while len(exterior) > last_size:
+        last_size = len(exterior)
+        translated = set().union(*map(lambda t: {*map(lambda p: move_point(t,p), exterior)}, translations))
+        candidates = {*filter(in_bounds, translated)}.difference(points)
+        exterior.update(candidates)
+    return exterior
+
+def count_exterior(points, exterior):
     for p in points:
-        for t in translations:
-            adjacent = move_point(p, t)
-            if adjacent not in points:
-                yield 1 if can_escape(adjacent, points) else 0
+        translated = set(map(lambda t: move_point(t,p), translations))
+        yield len(translated.intersection(exterior))
 
-def count_unoccupied(translations, points):
+def count_unoccupied(points):
     for p in points:
         translated = set(map(lambda t: move_point(t,p), translations))
         yield len(translated.difference(points))
